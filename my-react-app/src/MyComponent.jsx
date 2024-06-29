@@ -2,64 +2,54 @@ import React,{useState} from 'react';
 
 function MyComponent(){
 
-    const [name,setName]= useState("Guest");
-    const [quantity, setQuantity] = useState("1");
-    const [comment, setComment] = useState("");
-    const [payment, setPayment] = useState("");
-    const [shipping, setShipping] = useState("Delivery");
+    const [cars, setCars] = useState([]);
+    const [carYear, setCarYear] = useState(new Date().getFullYear());
+    const [carMake, setCarMake] = useState("");
+    const [carModel, setCarModel] = useState("");
 
-    function handleNameChange(event){
-        setName(event.target.value);
+    function handleAddCar(){
+        const newCar={  year: carYear,
+                        make: carMake,  
+                        model: carModel};
+        setCars(c => [...c, newCar]);
+        setCarYear(new Date().getFullYear());
+        setCarMake("");
+        setCarModel("");
     }
 
-    function handleQuantityChange(event){
-        setQuantity(event.target.value);
+    function handleRemoveCar(index){
+        setCars(c => c.filter((_,i) => i!== index ));
     }
 
-    function handleCommentChange(event){
-        setComment(event.target.value);
+    function handleYearChange(event){
+        setCarYear(event.target.value);
     }
 
-    function handlePaymentChange(event){
-        setPayment(event.target.value);
+    function handleMakeChange(event){
+        setCarMake(event.target.value);
     }
 
-    function handleShippingChange(event){
-        setShipping(event.target.value);
+    function handleModelChange(event){
+        setCarModel(event.target.value);
     }
     return( <div>
-            <input value={name} onChange={handleNameChange}/>
-            <p>Name: {name}</p>
+        <h2>List of Car Objects</h2>
+        <ul>
+            {cars.map((car, index) => 
+            <li key={index} onClick={()=> handleRemoveCar(index)}>
+                {car.year} {car.make} {car.model}
 
-            <input value={quantity} onChange={handleQuantityChange} type="number"/>
-            <p>Quantity: {quantity}</p>
+            </li>)}
+        </ul>
 
-            <textarea value={comment} onChange={handleCommentChange} placeholder="Enter delivery instruction"/>
-            <p>Comment: {comment}</p>
+        <input type="number" value={carYear} onChange={handleYearChange}/><br/>
+        <input type="text" value={carMake} onChange={handleMakeChange}
+                placeholder="Enter car make"/><br/>
+        <input type="text" value={carModel} onChange={handleModelChange}
+                placeholder="Enter car model"/><br/>
+        <button onClick={handleAddCar}>Add Car</button>
 
-            <select value={payment} onChange= {handlePaymentChange}>
-                <option value="">Select an option</option>
-                <option value="Visa">Visa</option>
-                <option value="Mastercard">Mastercard</option>
-            </select>
-            <p>Payment: {payment}</p>
-
-            <label>
-                <input type="radio" value="Pick Up"
-                checked={shipping === "Pick Up"}
-                onChange={handleShippingChange}/>
-                    Pickup
-             </label>
-             <br/>
-
-             <label>
-                <input type="radio" value="Delivery"
-                checked={shipping === "Delivery"}
-                onChange={handleShippingChange}/>
-                    Delivery
-             </label>
-            <p>Shipping: {shipping}</p>
-        </div>);
+    </div>);
 
     
-}export default MyComponent
+}export default MyComponent 
